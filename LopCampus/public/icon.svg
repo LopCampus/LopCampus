@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1e40af" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded squircle -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Accent glow / sun coin -->
+  <circle cx="390" cy="120" r="38" fill="#f59e0b" filter="url(#shadow)" />
+  <circle cx="390" cy="120" r="28" fill="#fbbf24" />
+
+  <!-- Main House Structure -->
+  <g filter="url(#shadow)">
+    <!-- Roof -->
+    <path d="M 100 230 L 256 95 L 412 230 Z" fill="#10b981" />
+    <path d="M 120 230 L 256 112 L 392 230 Z" fill="#34d399" opacity="0.35" />
+
+    <!-- Building Walls -->
+    <rect x="135" y="225" width="242" height="190" rx="16" fill="#ffffff" />
+
+    <!-- Windows -->
+    <rect x="165" y="260" width="46" height="56" rx="8" fill="#10b981" />
+    <line x1="188" y1="260" x2="188" y2="316" stroke="#ffffff" stroke-width="3" />
+    <line x1="165" y1="288" x2="211" y2="288" stroke="#ffffff" stroke-width="3" />
+
+    <rect x="301" y="260" width="46" height="56" rx="8" fill="#10b981" />
+    <line x1="324" y1="260" x2="324" y2="316" stroke="#ffffff" stroke-width="3" />
+    <line x1="301" y1="288" x2="347" y2="288" stroke="#ffffff" stroke-width="3" />
+
+    <!-- Arched Door -->
+    <path d="M 226 415 V 320 A 30 30 0 0 1 286 320 V 415 Z" fill="#1d4ed8" />
+    <circle cx="274" cy="365" r="4.5" fill="#f59e0b" />
+  </g>
+
+  <!-- Tanzanian Flag Tiny Heart/Badge or Brand Tag -->
+  <rect x="180" y="440" width="152" height="26" rx="8" fill="#0f172a" opacity="0.4" />
+  <text x="256" y="458" font-family="Plus Jakarta Sans, sans-serif" font-weight="900" font-size="14" fill="#ffffff" letter-spacing="3" text-anchor="middle">LOPCAMPUS</text>
+</svg>
