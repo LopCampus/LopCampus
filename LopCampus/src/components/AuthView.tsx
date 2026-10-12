@@ -286,7 +286,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess, onCancel }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto my-6 animate-in fade-in">
+    <div className="max-w-md mx-auto my-2 sm:my-6 animate-in fade-in w-full max-w-full">
       <div className="bg-white rounded-2xl border border-neutral-200 shadow-xl overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white p-6 text-center">

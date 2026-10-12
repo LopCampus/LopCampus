@@ -9,6 +9,7 @@ import { AuthView } from './components/AuthView';
 import { RoomDetailsModal } from './components/RoomDetailsModal';
 import { ReportModal } from './components/ReportModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { CheckCircle2, ShieldCheck } from 'lucide-react';
 
 export function App() {
@@ -160,7 +161,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-100 flex flex-col text-neutral-900 font-sans antialiased selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-neutral-100 flex flex-col text-neutral-900 font-sans antialiased selection:bg-blue-600 selection:text-white">
       {/* Offline Indicator Banner */}
       <OfflineIndicator />
 
@@ -181,7 +182,7 @@ export function App() {
       )}
 
       {/* Main Content Router */}
-      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 md:p-8">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 md:p-8 py-4 sm:py-6 pb-24 md:pb-8">
         {currentView === 'student-view' && (
           <StudentRoomsView
             rooms={rooms}
@@ -205,6 +206,7 @@ export function App() {
               onNavigatePostRoom={() => setCurrentView('add-room-view')}
               onNavigateStudentView={() => setCurrentView('student-view')}
               onSelectRoom={handleSelectRoom}
+              onLogout={handleLogout}
             />
           ) : (
             <AuthView onSuccess={handleAuthSuccess} onCancel={() => setCurrentView('student-view')} />
@@ -227,7 +229,7 @@ export function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-neutral-200 mt-12 py-8 text-xs text-neutral-500">
+      <footer className="bg-white border-t border-neutral-200 mt-12 py-8 text-xs text-neutral-500 mb-16 md:mb-0">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-xs">
@@ -246,6 +248,14 @@ export function App() {
           </div>
         </div>
       </footer>
+
+      {/* Mobile Bottom Navigation Bar (md:hidden) */}
+      <MobileBottomNav
+        currentView={currentView}
+        setCurrentView={setCurrentView}
+        brokerProfile={brokerProfile}
+        onLogout={handleLogout}
+      />
 
       {/* Modals */}
       {selectedRoom && (

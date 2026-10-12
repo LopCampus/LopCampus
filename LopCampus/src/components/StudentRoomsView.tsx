@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { RoomListing } from '../types';
-import { REGIONS_AND_DISTRICTS, UNIVERSITIES } from '../lib/constants';
+import { REGIONS_AND_DISTRICTS, UNIVERSITIES, getAllRoomImages } from '../lib/constants';
 import { getDaysRemaining } from '../lib/supabaseClient';
 import {
   Search,
@@ -17,7 +17,8 @@ import {
   Play,
   Video,
   CheckCircle2,
-  Clock
+  Clock,
+  Images
 } from 'lucide-react';
 
 interface StudentRoomsViewProps {
@@ -154,13 +155,13 @@ export const StudentRoomsView: React.FC<StudentRoomsViewProps> = ({
 
       {/* Filters Section */}
       <div className="bg-white p-4 sm:p-5 rounded-xl border border-neutral-200 shadow-sm space-y-3">
-        <div className="flex items-center justify-between pb-2 border-b border-neutral-100 text-xs font-bold text-neutral-500 uppercase tracking-wider">
-          <span className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center justify-between gap-2.5 pb-2 border-b border-neutral-100 text-xs font-bold text-neutral-500 uppercase tracking-wider">
+          <span className="flex items-center gap-1.5 shrink-0">
             <Filter className="w-3.5 h-3.5 text-blue-600" />
             <span>Vichungi vya Vyumba</span>
           </span>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               type="button"
               onClick={() => setFilterVideoOnly(!filterVideoOnly)}
@@ -174,7 +175,9 @@ export const StudentRoomsView: React.FC<StudentRoomsViewProps> = ({
               <span>Zenye Video ({videoCount})</span>
             </button>
 
-            <span className="text-neutral-700 font-semibold">{filteredRooms.length} Vimepatikana</span>
+            <span className="text-neutral-700 font-semibold text-[11px] sm:text-xs">
+              {filteredRooms.length} Vimepatikana
+            </span>
 
             <button
               type="button"
@@ -311,6 +314,7 @@ export const StudentRoomsView: React.FC<StudentRoomsViewProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredRooms.map((room) => {
               const hasVideo = Boolean(room.video_url);
+              const totalImages = getAllRoomImages(room).length;
 
               return (
                 <div
@@ -347,6 +351,18 @@ export const StudentRoomsView: React.FC<StudentRoomsViewProps> = ({
                       <div className="absolute top-2.5 left-2.5 bg-red-600/90 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-md animate-pulse">
                         <Play className="w-3 h-3 fill-current" />
                         <span>Video (30s)</span>
+                      </div>
+                    )}
+
+                    {/* Multi-Photo Count Badge */}
+                    {totalImages > 1 && (
+                      <div
+                        className={`absolute ${
+                          hasVideo ? 'top-9' : 'top-2.5'
+                        } left-2.5 bg-black/65 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm`}
+                      >
+                        <Images className="w-3 h-3 text-emerald-400" />
+                        <span>{totalImages} Picha</span>
                       </div>
                     )}
 

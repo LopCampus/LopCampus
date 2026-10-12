@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RoomListing } from '../types';
 import { RoomVideoPlayer } from './RoomVideoPlayer';
 import { getDaysRemaining } from '../lib/supabaseClient';
@@ -29,7 +29,14 @@ export const RoomDetailsModal: React.FC<RoomDetailsModalProps> = ({
   onReport
 }) => {
   const [copied, setCopied] = useState(false);
-  const [activeMediaTab, setActiveMediaTab] = useState<'video' | 'photo'>('video');
+  const [activeMediaTab, setActiveMediaTab] = useState<'video' | 'photo'>(
+    room?.video_url ? 'video' : 'photo'
+  );
+
+  // Pale mtu anapofungua chumba, mbele ibaki video (kama ipo), vinginevyo picha
+  useEffect(() => {
+    setActiveMediaTab(room?.video_url ? 'video' : 'photo');
+  }, [room?.id, room?.video_url]);
 
   if (!room) return null;
 
@@ -132,14 +139,17 @@ export const RoomDetailsModal: React.FC<RoomDetailsModalProps> = ({
           )}
 
           {hasVideo && activeMediaTab === 'video' ? (
-            <RoomVideoPlayer
-              videoUrl={room.video_url!}
-              thumbnailUrl={room.video_thumbnail_url || room.image_url}
-              duration={room.video_duration || 30}
-              title={room.room_type}
-            />
+            <div className="relative w-full h-72 sm:h-80 md:h-96">
+              <RoomVideoPlayer
+                videoUrl={room.video_url!}
+                thumbnailUrl={room.video_thumbnail_url || room.image_url}
+                duration={room.video_duration || 30}
+                title={room.room_type}
+                className="w-full h-full"
+              />
+            </div>
           ) : (
-            <div className="relative w-full h-64 sm:h-80">
+            <div className="relative w-full h-72 sm:h-80 md:h-96">
               <img
                 src={room.image_url}
                 alt={room.room_type}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrokerProfile, RoomListing } from '../types';
 import { updateRoomListing, deleteRoomListing, removeVideoFromRoom, getDaysRemaining } from '../lib/supabaseClient';
+import { getAllRoomImages } from '../lib/constants';
 import {
   PlusCircle,
   Eye,
@@ -16,7 +17,9 @@ import {
   Film,
   AlertTriangle,
   Clock,
-  X
+  X,
+  LogOut,
+  Images
 } from 'lucide-react';
 
 interface BrokerDashboardProps {
@@ -27,6 +30,7 @@ interface BrokerDashboardProps {
   onNavigatePostRoom: () => void;
   onNavigateStudentView: () => void;
   onSelectRoom: (room: RoomListing) => void;
+  onLogout?: () => void;
 }
 
 type ConfirmModalType = 'rented_delete' | 'permanent_delete' | 'remove_video';
@@ -44,7 +48,8 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
   onRefresh,
   onNavigatePostRoom,
   onNavigateStudentView,
-  onSelectRoom
+  onSelectRoom,
+  onLogout
 }) => {
   const [currentRooms, setCurrentRooms] = useState<RoomListing[]>(rooms);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
@@ -223,29 +228,48 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
         </div>
       </div>
 
-      {/* Top Banner */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
-            DALALI
+      {/* Dalali Profile & Quick Actions Banner */}
+      <div className="bg-white border border-neutral-200/90 rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-sm shrink-0 shadow-sm">
+            {brokerProfile.full_name?.charAt(0) || 'D'}
           </div>
-          <div>
-            <h3 className="text-sm font-bold text-neutral-900">
-              Eneo la Dalali & Mwenye Nyumba (Student Housing)
-            </h3>
-            <p className="text-xs text-neutral-600">
-              Simamia vyumba vyako vya wanafunzi, video za sekunde 30, na takwimu za wateja.
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <h3 className="text-sm sm:text-base font-bold text-neutral-900 truncate">
+                {brokerProfile.full_name}
+              </h3>
+              <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                Dalali Aliyethibitishwa
+              </span>
+            </div>
+            <p className="text-xs text-neutral-500 font-mono">
+              Simu: {brokerProfile.phone_number || 'Imehifadhiwa'}
             </p>
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={onNavigateStudentView}
-          className="flex items-center justify-center gap-1.5 px-3.5 py-2 bg-white hover:bg-neutral-50 text-blue-700 font-bold border border-blue-300 rounded-xl text-xs shadow-xs transition-all cursor-pointer"
-        >
-          <span>Tazama Upande wa Wanafunzi</span>
-        </button>
+        <div className="flex items-center gap-2 flex-wrap pt-1 sm:pt-0 border-t sm:border-t-0 border-neutral-100">
+          <button
+            type="button"
+            onClick={onNavigateStudentView}
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-xl text-xs transition-colors cursor-pointer"
+          >
+            <span>Tazama Vyumba</span>
+          </button>
+
+          {onLogout && (
+            <button
+              type="button"
+              onClick={onLogout}
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold rounded-xl text-xs transition-colors cursor-pointer"
+              title="Toka kwenye akaunti ya Dalali"
+            >
+              <LogOut className="w-3.5 h-3.5 text-rose-600" />
+              <span>Toka (Logout)</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Statistics Cards Grid */}
@@ -351,6 +375,17 @@ export const BrokerDashboard: React.FC<BrokerDashboardProps> = ({
                     <div className="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
                       <Play className="w-2.5 h-2.5 fill-current" />
                       <span>Video 30s</span>
+                    </div>
+                  )}
+
+                  {getAllRoomImages(room).length > 1 && (
+                    <div
+                      className={`absolute ${
+                        hasVideo ? 'top-7' : 'top-2'
+                      } left-2 bg-black/65 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 backdrop-blur-xs`}
+                    >
+                      <Images className="w-3 h-3 text-emerald-400" />
+                      <span>{getAllRoomImages(room).length} Picha</span>
                     </div>
                   )}
 

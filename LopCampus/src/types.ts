@@ -9,7 +9,10 @@ export interface RoomListing {
   landmark?: string | null;
   contact_phone: string;
   description?: string | null;
-  image_url: string;
+  image_url: string; // Picha Kuu
+  additional_images?: string[]; // Hadi picha 2 za ziada (Hiari)
+  image_url_2?: string | null; // Picha ya ziada 1
+  image_url_3?: string | null; // Picha ya ziada 2
   views: number;
   status: 'active' | 'rented' | 'inactive';
   duration_days: number;

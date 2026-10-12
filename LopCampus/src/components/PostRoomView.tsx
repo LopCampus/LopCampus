@@ -43,7 +43,7 @@ export const PostRoomView: React.FC<PostRoomViewProps> = ({
   const [description, setDescription] = useState('');
   const durationDays = 14; // Matangazo ya vyumba hufutika kiotomatiki baada ya wiki 2 (siku 14)
 
-  // Image State (Mandatory)
+  // Image State (Inahitajika)
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -216,7 +216,7 @@ export const PostRoomView: React.FC<PostRoomViewProps> = ({
         try {
           const selectedClipDuration = Math.min(30, Math.max(1, (originalVideoDuration || 30) - trimStartTime));
           setProgressMessage(`Inakata kipande cha sekunde ${selectedClipDuration} (kuanzia ${formatTime(trimStartTime)})...`);
-          setProgressPercent(45);
+          setProgressPercent(55);
 
           const { compressedBlob, finalSize: compressedSize, duration } = await compressVideoFile(
             videoFile,
@@ -225,7 +225,7 @@ export const PostRoomView: React.FC<PostRoomViewProps> = ({
               duration: selectedClipDuration,
               onProgress: (msg, pct) => {
                 setProgressMessage(msg);
-                setProgressPercent(pct);
+                setProgressPercent(Math.min(85, Math.max(50, pct)));
               }
             }
           );
@@ -239,7 +239,7 @@ export const PostRoomView: React.FC<PostRoomViewProps> = ({
           }
 
           setProgressMessage('Inapakia video kwenye seva...');
-          setProgressPercent(75);
+          setProgressPercent(85);
 
           const { videoUrl: uploadedUrl, videoSize: uploadedSize } = await uploadVideoToStorage(
             compressedBlob,
@@ -258,7 +258,7 @@ export const PostRoomView: React.FC<PostRoomViewProps> = ({
 
       // 3. Save listing into Supabase database
       setProgressMessage('Inahifadhi taarifa za chumba kwenye mfumo wa LopCampus...');
-      setProgressPercent(90);
+      setProgressPercent(92);
 
       const roomPayload = {
         broker_id: brokerProfile.id,
@@ -301,16 +301,16 @@ export const PostRoomView: React.FC<PostRoomViewProps> = ({
   };
 
   return (
-    <div className="max-w-2xl mx-auto my-4 animate-in fade-in">
+    <div className="max-w-2xl mx-auto my-2 sm:my-4 animate-in fade-in w-full max-w-full">
       <div className="bg-white rounded-2xl border border-neutral-200 shadow-xl overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-5 sm:p-6 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-4 sm:p-6 flex items-center justify-between gap-3">
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-xs font-semibold mb-1">
               <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
               <span>Bure Kabisa • Hakuna Tozo Yoyote</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black tracking-tight">Weka Tangazo Jipya la Chumba</h2>
+            <h2 className="text-lg sm:text-2xl font-black tracking-tight">Weka Tangazo Jipya la Chumba</h2>
             <p className="text-xs sm:text-sm text-emerald-100 mt-0.5">
               Jaza taarifa sahihi zenye picha na video ya sekunde 30 ili wanafunzi wakupigie moja kwa moja
             </p>
@@ -319,14 +319,14 @@ export const PostRoomView: React.FC<PostRoomViewProps> = ({
           <button
             type="button"
             onClick={onCancel}
-            className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer"
+            className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all cursor-pointer shrink-0"
           >
             Ghairi
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-5">
           {/* Error Message */}
           {errorMessage && (
             <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs flex items-start gap-2.5">
@@ -427,15 +427,27 @@ export const PostRoomView: React.FC<PostRoomViewProps> = ({
                   </div>
                 )}
 
-                {/* Video yenye kitufe kimoja tu cha kuplay */}
-                <div className="relative aspect-video rounded-xl overflow-hidden bg-black border border-neutral-300">
+                {/* Video yenye mwonekano kamili unaojaa kioo */}
+                <div className="relative aspect-video rounded-xl overflow-hidden bg-neutral-950 border border-neutral-300 group">
+                  {videoThumbnailUrl && (
+                    <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+                      <img
+                        src={videoThumbnailUrl}
+                        alt=""
+                        className="w-full h-full object-cover blur-xl scale-125 opacity-40"
+                      />
+                    </div>
+                  )}
                   <video
                     ref={previewVideoRef}
                     src={videoPreviewUrl}
                     controls
                     playsInline
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover"
                   />
+                  <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-bold text-white pointer-events-none">
+                    Inajaa Kioo
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between text-xs text-neutral-600 bg-white p-2.5 rounded-xl border border-neutral-200">

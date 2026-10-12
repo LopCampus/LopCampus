@@ -55,6 +55,10 @@ export const SAMPLE_ROOMS: RoomListing[] = [
     contact_phone: '0712345678',
     description: 'Chumba kizuri sana chenye tiles, gypsum, choo cha ndani, maji ya DAWASA 24/7 na umeme wa Luku unaojitegemea. Mazingira tulivu ya kujisomea, fensi imara na geti.',
     image_url: 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80',
+    additional_images: [
+      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80'
+    ],
     video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     video_thumbnail_url: 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80',
     video_duration: 15,
@@ -94,6 +98,10 @@ export const SAMPLE_ROOMS: RoomListing[] = [
     contact_phone: '0768112233',
     description: 'Chumba kimoja na sebule kubwa, jiko dogo la kisasa, luku ya kwako, parking ipo ya gari na pikipiki. Mazingira tulivu kabisa kwa ajili ya kusoma.',
     image_url: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
+    additional_images: [
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80'
+    ],
     video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
     video_thumbnail_url: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
     video_duration: 15,
@@ -116,6 +124,9 @@ export const SAMPLE_ROOMS: RoomListing[] = [
     contact_phone: '0712345678',
     description: 'Chumba kizuri katikati ya jiji karibu na IFM. Choo cha ndani, feni, fensi yenye ulinzi wa masaa 24. Hakuna usumbufu wa usafiri.',
     image_url: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80',
+    additional_images: [
+      'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80'
+    ],
     views: 67,
     status: 'active',
     duration_days: 14,
@@ -144,6 +155,26 @@ export const SAMPLE_ROOMS: RoomListing[] = [
     created_at: new Date(Date.now() - 150000000).toISOString(),
   }
 ];
+
+/**
+ * Returns all available images for a room in order:
+ * [Picha Kuu, Picha ya Ziada 1, Picha ya Ziada 2]
+ */
+export function getAllRoomImages(room?: Partial<RoomListing> | null): string[] {
+  if (!room) return [];
+  const images: string[] = [];
+  if (room.image_url) images.push(room.image_url);
+  if (Array.isArray(room.additional_images)) {
+    room.additional_images.forEach((img) => {
+      if (img && !images.includes(img)) images.push(img);
+    });
+  }
+  if (room.image_url_2 && !images.includes(room.image_url_2)) images.push(room.image_url_2);
+  if (room.image_url_3 && !images.includes(room.image_url_3)) images.push(room.image_url_3);
+  return images.length > 0
+    ? images
+    : [room.image_url || 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80'];
+}
 
 export const ROOM_EXPIRY_DAYS = 14; // Matangazo ya vyumba hufutika kiotomatiki baada ya wiki 2 (siku 14)
 

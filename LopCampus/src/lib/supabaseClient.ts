@@ -326,9 +326,19 @@ export async function createRoomListing(
 
     if (error) {
       // If error is about missing video columns, fallback to inserting core fields
-      if (error.message.includes('video_url') || error.message.includes('column')) {
-        console.warn('Video columns not yet created in Supabase. Inserting core listing and saving video locally...');
-        const { video_url, video_thumbnail_url, video_duration, video_size, video_status, ...coreRoom } = room;
+      if (error.message.includes('video_url') || error.message.includes('column') || error.message.includes('additional_images') || error.message.includes('image_url_2')) {
+        console.warn('Extended columns not yet created in Supabase. Inserting core listing and saving extra media locally...');
+        const {
+          video_url,
+          video_thumbnail_url,
+          video_duration,
+          video_size,
+          video_status,
+          additional_images,
+          image_url_2,
+          image_url_3,
+          ...coreRoom
+        } = room;
         
         const { data: coreData, error: coreErr } = await supabase
           .from('rooms')
@@ -348,11 +358,14 @@ export async function createRoomListing(
 
         const merged: RoomListing = {
           ...coreData,
+          additional_images,
+          image_url_2,
+          image_url_3,
           video_url,
           video_thumbnail_url,
           video_duration,
           video_size,
-          video_status: 'ready'
+          video_status: video_url ? 'ready' : null
         };
         saveLocalRoom(merged);
         return { data: merged };
@@ -360,6 +373,9 @@ export async function createRoomListing(
       throw error;
     }
 
+    if (data) {
+      saveLocalRoom(data as RoomListing);
+    }
     return { data: data as RoomListing };
   } catch (err: any) {
     console.error('Error creating room:', err);
