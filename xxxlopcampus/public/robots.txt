@@ -1,0 +1,6 @@
+# LopCampus Robots.txt - Allows Google and all search engines to crawl and index LopCampus
+User-agent: *
+Allow: /
+
+# Direct links to sitemap for Google Search Console
+Sitemap: https://lopcampus.vercel.app/sitemap.xml
